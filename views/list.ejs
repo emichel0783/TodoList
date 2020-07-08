@@ -1,0 +1,56 @@
+<%- include("header") -%>
+
+<div class="box" id="heading">
+  <h1> <%= listTitle %> </h1>
+</div>
+
+<div class="toc-box">
+  <form class="custom-list" action="/custom" method="post">
+    <div class="box" id="new-list-div">
+      <input type="text" name="customListInput" placeholder="Add A List" autocomplete="off"></input>
+      <button type="submit" name="customListButton">+</button>
+    </div>
+  </form>
+  <% tableOfContents.forEach(function(l) { %>
+    <% if (l.name === "Favicon.ico") { %>
+      <div class="toc-div">
+        <form action="/delete-list" method="post">
+          <input type="checkbox" name="tocCheckbox" value="<%= l._id %>" onchange="this.form.submit()"></input>
+        </form>
+        <form action="/change" method="post">
+          <button class="toc-button" type="submit" name="tocButton" value="<%= l._id %>">Today</button>
+        </form>
+      </div>
+    <% } else { %>
+      <div class="toc-div">
+        <form action="/delete-list" method="post">
+          <input type="checkbox" name="tocCheckbox" value="<%= l._id %>" onchange="this.form.submit()"></input>
+        </form>
+        <form action="/change" method="post">
+          <button class="toc-button" type="submit" name="tocButton" value="<%= l._id %>"><%= l.name %></button>
+        </form>
+      </div>
+    <% } %>
+  <% }); %>
+</div>
+
+<div class="box">
+  <% newListItems.forEach(function(item) { %>
+    <% if (item.name !== "Item Placeholder") { %>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input name="doneCheckBox" type="checkbox" value="<%= item._id %>" onChange="this.form.submit()"></input>
+          <p><%=  item.name  %></p>
+        </div>
+        <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+      </form>
+    <% } %>
+  <% }); %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+      <button type="submit" name="list" value="<%= listTitle  %>">+</button>
+    </form>
+</div>
+
+<%- include("footer") -%>
